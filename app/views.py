@@ -5,37 +5,27 @@ Werkzeug Documentation:  http://werkzeug.pocoo.org/documentation/
 This file creates your application.
 """
 
-from app import app
-from flask import render_template, request, jsonify, redirect, url_for
-from forms import UploadForm
-import os
+from app import app 
+from flask import render_template, request, jsonify,redirect, url_for
+from .forms import UploadForm
 from werkzeug.utils import secure_filename
+import os
 
 ###
 # Routing for your application.
 ###
 
 
-# Please create all new routes and view functions above this route.
-# This route is now our catch all route for our VueJS single page
-# application.
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
-def index(path):
-    """
-    Because we use HTML5 history mode in vue-router we need to configure our
-    web server to redirect all routes to index.html. Hence the additional route
-    "/<path:path".
-
-    Also we will render the initial webpage and then let VueJS take control.
-    """
+@app.route('/')
+def index():
+    """Render website's initial page and let VueJS take over."""
     return render_template('index.html')
+
+
     
-    
-    
-@app.route('/api/upload', method=['POST'])
+@app.route('/api/upload', methods=['POST'])
 def upload():
-    form=UploadForm()
+    form= UploadForm()
     
     if request.method=='POST' and form.validate_on_submit():
         photo = form.photo.data
@@ -44,18 +34,17 @@ def upload():
         description = form.description.data
         
         result = [{
-            'message': 'File Upload Successful',
-            'filename': 'you-uploaded-file.jpg',
-            'Description': 'Some description for your image'
+            'message': 'File Successfully Uploaded',
+            'filename': filename,
+            'Description': description
+            
         }]
-        return jsonify(result=result)
+        return jsonify(result= result )
     error_retrieval = form_errors(form)
     error = [{'errors': error_retrieval}]
     return jsonify(errors=error)
     
-        
-
-
+    
 # Here we define a function to collect form errors from Flask-WTF
 # which we can later use
 def form_errors(form):
@@ -104,3 +93,4 @@ def page_not_found(error):
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0", port="8080")
+

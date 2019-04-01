@@ -1,11 +1,20 @@
-from flask_wtf.file import FileAllowed, FileRequired, FileField
+from app import app
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileRequired, FileAllowed
+from wtforms import  StringField
 from wtforms.fields import TextAreaField
 from wtforms.validators import DataRequired
-from wtforms import SpringField
-
 
 class UploadForm(FlaskForm):
-      description = TextAreaField('Description', validators=[DataRequired()])
-      photo = FileField('Upload Image', validators=[FileRequired(), FileAllowed(['jpg', 'png', 'jpeg'], 'Only jpg, png and jpeg is accepted')])
+     description = TextAreaField('Description', validators=[DataRequired()])
+     photo = FileField('Photo', validators=[FileRequired(), FileAllowed(['jpg', 'png', 'jpeg'], "Images Only!")])
+
+
+
+
+
+
+
+
+
 
